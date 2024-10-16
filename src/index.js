@@ -24,7 +24,8 @@ app.get("/signup",(req,res)=>{
 app.post("/signup",async (req,res)=>{
     const data={
         name:req.body.name,
-        password:req.body.password
+        password:req.body.password,
+        email:req.body.email
 
     }
 
@@ -38,11 +39,11 @@ app.post("/login",async (req,res)=>{
   try{
         const check=await collection.findOne({name:req.body.name})
 
-        if(check.password===req.body.password){
+        if(check.password===req.body.password && check.email===req.body.email){
             res.render("home")
         }
         else{
-            res.send("wrong password")
+            res.render("signup")
         }
   }
   catch{

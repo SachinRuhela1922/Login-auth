@@ -3,9 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Google Search Integration with Images</title>
 </head>
 <body>
-    <h1>Home</h1>
+
+    <h1>Search for Information</h1>
+    <input type="text" id="searchQuery" placeholder="Search here..." />
+    <button onclick="searchGoogle()">Search</button>
+
+    <div id="results"></div>
+
+    <script>
+        const apiKey = 'AIzaSyD80Yyxiy4jNadTu36G9HSA2j1zpIFdd-Q';  // Replace with your API key
+        const searchEngineId = 'a01326140182a41a1'; // Replace with your Custom Search Engine ID
+
+        function searchGoogle() {
+            const query = document.getElementById('searchQuery').value;
+            const url = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${searchEngineId}&q=${query}&searchType=image`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const resultsDiv = document.getElementById('results');
+                    resultsDiv.innerHTML = ''; // Clear previous results
+
+                    data.items.forEach(item => {
+                        const resultItem = `
+                            <div style="margin-bottom: 20px;">
+                                <h3><a href="${item.link}" target="_blank">${item.title}</a></h3>
+                                <img src="${item.link}" alt="${item.title}" width="200px"/>
+                                <p>${item.snippet}</p>
+                            </div>
+                        `;
+                        resultsDiv.innerHTML += resultItem;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
 </body>
 </html>
